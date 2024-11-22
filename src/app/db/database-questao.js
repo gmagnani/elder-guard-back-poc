@@ -1,4 +1,4 @@
-import {sql} from '../db/db';
+import {sql} from './db.js';
 
 export class DatabaseQuestao{
     async getQuestoes(){
@@ -6,15 +6,20 @@ export class DatabaseQuestao{
     return questoes;
     }
 
-    async criarQuestao(questao){
-        const {titulo, descricao, tipo} = questao;
-        
-        const [novaQuestao] = await sql`
-        INSERT INTO questao (titulo, descricao, tipo) 
-        VALUES (${titulo}, ${descricao}, ${tipo})
-        RETURNING id
-    `;
-    return novaQuestao.id;
+    async criarQuestao(questao) {
+        const { titulo, descricao, tipo } = questao;
+    
+        try {
+            const [novaQuestao] = await sql`
+                INSERT INTO questao (titulo, descricao, tipo) 
+                VALUES (${titulo}, ${descricao}, ${tipo})
+                RETURNING id
+            `;
+            return novaQuestao.id;
+        } catch (error) {
+            console.error('Erro ao criar questão:', error.message);
+            throw new Error('Erro ao inserir questão no banco de dados.');
+        }
     }
 
     async alterarQuestao(id, questao){
