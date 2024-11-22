@@ -6,7 +6,7 @@ import { DatabaseQuestao} from './src/app/db/database-questao.js'
 const app = express();
 
 app.use(cors());
-app.use(express.json()); // Adicione isso no topo, logo após criar o app
+app.use(express.json()); 
 
 
 const database = new DatabaseFormulario();

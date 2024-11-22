@@ -8,18 +8,17 @@ export class DatabaseFormulario{
 
     async criarFormulario(formulario, questaoId) {
         const { nome, tipo, descricao, ordem } = formulario;
-        console.log('Dados recebidos para criar formulário:');
-        console.log('Nome:', nome);
-        console.log('Tipo:', tipo);
-        console.log('Descrição:', descricao);
-        console.log('Ordem:', ordem);
-        console.log('Questão ID:', questaoId);
-    
         try {
+            const query = `
+                INSERT INTO formulario (nome, tipo, descricao, ordem, questao_id) 
+                VALUES ('${nome}', '${tipo}', '${descricao}', ${ordem}, ${questaoId})
+            `;
+            console.log('Query:', query);
             await sql`
                 INSERT INTO formulario (nome, tipo, descricao, ordem, questao_id) 
                 VALUES (${nome}, ${tipo}, ${descricao}, ${ordem} , ${questaoId})
             `;
+            return { mensagem: 'Formulário criado com sucesso.' };
         } catch (error) {
             console.error('Erro ao criar formulário:', error.message);
             throw new Error('Erro ao inserir formulário no banco de dados.');
