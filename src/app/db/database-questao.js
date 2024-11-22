@@ -22,6 +22,21 @@ export class DatabaseQuestao{
         }
     }
 
+    async criarOpcao(opcao, questao_id){
+        const { descricao, pontuacao} = opcao;
+        try {
+            const [novaOpcao] = await sql`
+                INSERT INTO opcao (descricao, pontuacao, questao_id) 
+                VALUES (${descricao}, ${pontuacao}, ${questao_id})
+                RETURNING id
+            `;
+            return novaOpcao.id;
+        } catch (error) {
+            console.error('Erro ao criar opção:', error.message);
+            throw new Error('Erro ao inserir opção no banco de dados.');
+        }
+    }
+
     async alterarQuestao(id, questao){
         const {titulo, descricao, tipo} = questao;
         await sql`UPDATE formulario SET titulo = ${titulo}, descricao = ${descricao}, tipo=${tipo} WHERE id=${id}`;

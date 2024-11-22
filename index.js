@@ -49,7 +49,7 @@ app.put('/formularios/editar/:id', async (request, response) =>{
     return response.json(resultado);
 });
 
-app.delete('/formularios/excluir/id', async (request, response) => {
+app.delete('/formularios/excluir/:id', async (request, response) => {
     const formularioId = request.params.id;
     const resultado = await database.deletarFormulario(formularioId);
     return response.json(resultado);

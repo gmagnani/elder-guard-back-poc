@@ -6,6 +6,11 @@ export class DatabaseFormulario{
     return formularios;
     }
 
+    async getFormulario(formularioId){
+        const formulario = await sql`SELECT * FROM formulario WHERE id=${formularioId}`;
+    return formulario;
+    }
+
     async criarFormulario(formulario, questaoId) {
         const { nome, tipo, descricao, ordem } = formulario;
         try {
