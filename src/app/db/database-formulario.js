@@ -8,7 +8,8 @@ export class DatabaseFormulario{
 
     async getFormulario(formularioId){
         const formulario = await sql`SELECT * FROM formulario WHERE id=${formularioId}`;
-    return formulario;
+        const resultado = await sql`select * from Formulario form, Questao quest where quest.id=${formulario.questao_id}`
+    return resultado;
     }
 
     async criarFormulario(formulario, questaoId) {
