@@ -8,8 +8,14 @@ export class DatabaseFormulario{
 
     async getFormulario(formularioId){
         const formulario = await sql`SELECT * FROM formulario WHERE id=${formularioId}`;
-        const resultado = await sql`select * from Formulario form, Questao quest where quest.id=${formulario.questao_id}`
-    return resultado;
+        const questao = await sql`SELECT * FROM questao WHERE id=${formulario.questao_id}`;
+        if(questao.tipo == 'opcoes'){
+            const resultado = await sql`SELECT * FROM formulario form, questao quest, opcao op WHERE quest.id=${formulario.questao_id} AND op.questao_id=${formulario.questao_id}`;
+            return resultado;
+        }
+        const resultado = await sql`SELECT * FROM formulario form, questao quest WHERE quest.id=${formulario.questao_id} `;
+            return resultado;
+
     }
 
     async criarFormulario(formulario, questaoId) {
