@@ -6,17 +6,35 @@ export class DatabaseFormulario{
     return formularios;
     }
 
-    async getFormulario(formularioId){
-        const formulario = await sql`SELECT * FROM formulario WHERE id=${formularioId}`;
-        const questao = await sql`SELECT * FROM questao WHERE id=${formulario.questao_id}`;
-        if(questao.tipo == 'opcoes'){
-            const resultado = await sql`SELECT * FROM formulario form, questao quest, opcao op WHERE quest.id=${formulario.questao_id} AND op.questao_id=${formulario.questao_id}`;
-            return resultado;
+    async getFormulario(formularioId) {        
+        const [formulario] = await sql`SELECT * FROM formulario WHERE id=${formularioId}`;
+        if (!formulario || !formulario.questao_id) {
+            console.error('Questão ID não encontrado no formulário!');
+            return null;
         }
-        const resultado = await sql`SELECT * FROM formulario form, questao quest WHERE quest.id=${formulario.questao_id} `;
-            return resultado;
-
+        const [questao] = await sql`SELECT * FROM questao WHERE id=${formulario.questao_id}`;
+        const resultado = {
+            id: formulario.id,
+            nome: formulario.nome,
+            descricao: formulario.descricao,
+            questao: {
+                titulo: questao.titulo,
+                descricao: questao.descricao,
+                tipo: questao.tipo,
+                opcoes: [],
+            },
+        };
+        if (questao.tipo === 'opcoes') {
+            const opcoes = await sql`SELECT descricao, pontuacao FROM opcao WHERE questao_id=${formulario.questao_id}`;
+            resultado.questao.opcoes = opcoes.map(opcao => ({
+                descricao: opcao.descricao,
+                valor: opcao.pontuacao,
+            }));
+        }
+    
+        return resultado;
     }
+    
 
     async criarFormulario(formulario, questaoId) {
         const { nome, tipo, descricao, ordem } = formulario;
