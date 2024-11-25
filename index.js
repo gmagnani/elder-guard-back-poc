@@ -68,6 +68,7 @@ app.post('/formularios/responder/:id', async (request, response) =>{
     }
 
     const resultado = await databaseFormResp.responderFormulario(formularioid, pontuacao);
+    return response.json(resultado);
 })
 
 app.put('/formularios/editar/:id', async (request, response) =>{

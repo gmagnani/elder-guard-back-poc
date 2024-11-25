@@ -18,6 +18,7 @@ export class DatabaseFormulario{
             nome: formulario.nome,
             descricao: formulario.descricao,
             questao: {
+                id: questao.id,
                 titulo: questao.titulo,
                 descricao: questao.descricao,
                 tipo: questao.tipo,

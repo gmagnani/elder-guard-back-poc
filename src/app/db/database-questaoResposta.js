@@ -8,5 +8,6 @@ export class DatabaseQuestaoResposta{
                                             VALUES (${resposta}, ${pontuacao}, ${questao_id}, ${formularioId})
                                             RETURNING id
                                         `
+        return questaoRespondidaId;
     }
 }
